@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <chrono>
 #include <thread>
+#include <string>
 
 // 简单的3D向量类（如果没有glm库）
 struct vec3 {
@@ -105,7 +106,7 @@ public:
         }
         
         // 创建相邻粒子间的应力约束
-        for (int i = 0; i < chain_particles.size() - 1; i++) {
+        for (size_t i = 0; i < chain_particles.size() - 1; i++) {
             int p1 = chain_particles[i];
             int p2 = chain_particles[i + 1];
             float length = (particles[p2].position - particles[p1].position).length();
@@ -212,7 +213,7 @@ public:
     
     // 添加外力
     void applyForce(int particle_id, vec3 force, float dt) {
-        if (particle_id < particles.size() && !particles[particle_id].is_static) {
+        if (particle_id >= 0 && static_cast<size_t>(particle_id) < particles.size() && !particles[particle_id].is_static) {
             particles[particle_id].velocity += force * (particles[particle_id].inv_mass * dt);
         }
     }
@@ -304,9 +305,9 @@ public:
 
 // 测试场景1：基础重力下垂测试
 void testBasicGravity() {
-    std::cout << "\n" << "="*50 << std::endl;
+    std::cout << "\n" << std::string(50, '=') << std::endl;
     std::cout << "测试场景1：基础重力下垂测试" << std::endl;
-    std::cout << "="*50 << std::endl;
+    std::cout << std::string(50, '=') << std::endl;
     
     PBDStressSystem system(0.99f, 5);
     
@@ -341,9 +342,9 @@ void testBasicGravity() {
 
 // 测试场景2：外力拉伸测试
 void testExternalForce() {
-    std::cout << "\n" << "="*50 << std::endl;
+    std::cout << "\n" << std::string(50, '=') << std::endl;
     std::cout << "测试场景2：外力拉伸测试" << std::endl;
-    std::cout << "="*50 << std::endl;
+    std::cout << std::string(50, '=') << std::endl;
     
     PBDStressSystem system(0.95f, 8);
     
@@ -396,9 +397,9 @@ void testExternalForce() {
 
 // 测试场景3：材料断裂测试
 void testMaterialFailure() {
-    std::cout << "\n" << "="*50 << std::endl;
+    std::cout << "\n" << std::string(50, '=') << std::endl;
     std::cout << "测试场景3：材料断裂测试" << std::endl;
-    std::cout << "="*50 << std::endl;
+    std::cout << std::string(50, '=') << std::endl;
     
     PBDStressSystem system(0.9f, 10);
     
@@ -466,9 +467,9 @@ int main() {
         
         testMaterialFailure();
         
-        std::cout << "\n" << "="*50 << std::endl;
+        std::cout << "\n" << std::string(50, '=') << std::endl;
         std::cout << "所有测试完成！" << std::endl;
-        std::cout << "="*50 << std::endl;
+        std::cout << std::string(50, '=') << std::endl;
         
     } catch (const std::exception& e) {
         std::cerr << "错误: " << e.what() << std::endl;
